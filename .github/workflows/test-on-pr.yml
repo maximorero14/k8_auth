@@ -7,6 +7,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: codecov
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
