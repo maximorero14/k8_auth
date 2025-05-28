@@ -31,4 +31,12 @@ public class HealthCheckControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("ok_k8_auth_v2"));
     }
+
+    @Test
+public void shouldReturnNoExceptionMessageWhenThrowIsFalse() throws Exception {
+    mockMvc.perform(get("/exception")
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.exception").value("No se lanzó ninguna excepción."));
+}
 }
