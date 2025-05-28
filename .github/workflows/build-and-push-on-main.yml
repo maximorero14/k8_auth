@@ -1,30 +1,15 @@
-name: Build, Test & Publish Docker Image
+# .github/workflows/build-and-push-on-main.yml
+
+name: Build and Push Docker Image on Main
 
 on:
-  pull_request:
-    branches: [ main ]
   push:
     branches: [ main ]
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Docker image and run tests
-        run: |
-          docker build --target build -t test-image .
-
   publish:
-    if: github.ref == 'refs/heads/main'
-    needs: build-and-test
     runs-on: ubuntu-latest
-    environment: docker-deploy
+    environment: general
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -43,4 +28,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/k8_auth:latest
+          tags: maximorero14/k8_auth:latest

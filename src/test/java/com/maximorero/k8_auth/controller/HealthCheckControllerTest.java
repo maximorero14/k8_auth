@@ -23,4 +23,12 @@ public class HealthCheckControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("pong_k8_auth"));
     }
+
+    @Test
+    public void shouldReturnHealthStatus() throws Exception {
+        mockMvc.perform(get("/health")
+                        .accept(MediaType.TEXT_PLAIN))
+                .andExpect(status().isOk())
+                .andExpect(content().string("ok_k8_auth_v2"));
+    }
 }

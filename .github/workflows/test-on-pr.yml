@@ -1,0 +1,37 @@
+name: Run Tests on Pull Request
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    environment: codecov
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image and run tests
+        run: |
+          docker build --target build -t test-image .
+          # Copiar reporte de cobertura desde el contenedor
+          CONTAINER_ID=$(docker create test-image)
+          docker cp $CONTAINER_ID:/app/target/site/jacoco ./jacoco
+          docker rm $CONTAINER_ID
+
+      - name: Upload Jacoco Coverage Report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: ./jacoco
+
+      # OPCIONAL: Subir cobertura a Codecov
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./jacoco/jacoco.xml
