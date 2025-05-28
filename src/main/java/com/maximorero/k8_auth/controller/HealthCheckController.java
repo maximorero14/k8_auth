@@ -41,6 +41,6 @@ public class HealthCheckController {
 	@GetMapping("/health")
 	public ResponseEntity<String> health() {
 		log.info("[log_name: health]");
-		return new ResponseEntity<>("ok_k8_auth", HttpStatus.OK);
+		return new ResponseEntity<>("ok_k8_auth_v2", HttpStatus.OK);
 	}
 }

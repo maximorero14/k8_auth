@@ -6,7 +6,9 @@ COPY pom.xml .
 RUN mvn dependency:go-offline -B
 
 COPY . .
-RUN mvn clean package -DskipTests -B
+
+# Ejecutar tests y generar reporte de Jacoco
+RUN mvn clean verify -B
 
 # Etapa de ejecución
 FROM eclipse-temurin:17-jre
@@ -16,11 +18,9 @@ WORKDIR /app
 # Copiamos el artefacto final
 COPY --from=build /app/target/*.jar application.jar
 
-# Crear un usuario sin privilegios
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 USER appuser
 
-# Puerto opcionalmente documentado
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "application.jar"]
