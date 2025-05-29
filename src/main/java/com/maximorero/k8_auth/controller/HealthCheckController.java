@@ -21,7 +21,7 @@ public class HealthCheckController {
 	public ResponseEntity<JsonNode> ping() throws Exception {
 		log.info("[log_name: ping]");
 		ObjectMapper mapper = new ObjectMapper();
-		JsonNode response = mapper.createObjectNode().put("message", "pong_k8_auth");
+		JsonNode response = mapper.createObjectNode().put("message", "failed");
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
