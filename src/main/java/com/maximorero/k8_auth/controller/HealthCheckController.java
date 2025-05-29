@@ -25,6 +25,7 @@ public class HealthCheckController {
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
+
 	@GetMapping("/exception")
 	public ResponseEntity<JsonNode> exception(@RequestParam(name = "throw", defaultValue = "false") boolean throwException) throws Exception {
 
