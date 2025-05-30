@@ -1,3 +1,4 @@
+# .github/workflows/build-and-push-on-main.yml
 name: Build and Push Docker Image on Main
 
 on:
@@ -10,45 +11,28 @@ jobs:
     environment: general
 
     steps:
+    # 1) Checkout SOLO lectura (sin credenciales de push)
     - name: Checkout code
       uses: actions/checkout@v3
       with:
-        persist-credentials: false   # ← evita guardar el GITHUB_TOKEN de solo-lectura
+        persist-credentials: false
 
+    # 2) Configurar Buildx
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
+    # 3) Login a Docker Hub
     - name: Log in to Docker Hub
       uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    # --- versión ---
-    - name: Read and bump version
-      id: versioning
-      run: |
-        ver=$(cat VERSION)
-        new=$((ver + 1))
-        echo "VERSION=$new" >> "$GITHUB_ENV"
-        echo "$new" > VERSION
+    # 4) Definir la versión a partir del número de run
+    - name: Set VERSION env
+      run: echo "VERSION=${{ github.run_number }}" >> $GITHUB_ENV
 
-    # --- habilita push con tu PAT ---
-    - name: Configure git for PAT push
-      env:
-        GH_PAT: ${{ secrets.GH_PAT }}
-      run: |
-        git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
-
-    - name: Commit new VERSION
-      run: |
-        git config user.name  "GitHub Actions"
-        git config user.email "actions@github.com"
-        git add VERSION
-        git commit -m "ci: bump version to v${{ env.VERSION }}"
-        git push origin HEAD:main
-
-    # --- build & push ---
+    # 5) Build & push con las dos etiquetas
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
