@@ -8,40 +8,52 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     environment: general
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false   # ← evita guardar el GITHUB_TOKEN de solo-lectura
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Read and bump version
-        id: versioning
-        run: |
-          version=$(cat VERSION)
-          new_version=$((version + 1))
-          echo "VERSION=v$new_version" >> $GITHUB_ENV
-          echo $new_version > VERSION
+    # --- versión ---
+    - name: Read and bump version
+      id: versioning
+      run: |
+        ver=$(cat VERSION)
+        new=$((ver + 1))
+        echo "VERSION=$new" >> "$GITHUB_ENV"
+        echo "$new" > VERSION
 
-      - name: Commit new VERSION
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git add VERSION
-          git commit -m "ci: bump version to v${{ env.VERSION }}"
-          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }} HEAD:main
+    # --- habilita push con tu PAT ---
+    - name: Configure git for PAT push
+      env:
+        GH_PAT: ${{ secrets.GH_PAT }}
+      run: |
+        git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: |
-            maximorero14/k8_auth:latest
-            maximorero14/k8_auth:v${{ env.VERSION }}
+    - name: Commit new VERSION
+      run: |
+        git config user.name  "GitHub Actions"
+        git config user.email "actions@github.com"
+        git add VERSION
+        git commit -m "ci: bump version to v${{ env.VERSION }}"
+        git push origin HEAD:main
+
+    # --- build & push ---
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: |
+          maximorero14/k8_auth:latest
+          maximorero14/k8_auth:v${{ env.VERSION }}
