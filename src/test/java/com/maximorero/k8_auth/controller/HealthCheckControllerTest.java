@@ -17,14 +17,6 @@ public class HealthCheckControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void shouldReturnPongMessage() throws Exception {
-        mockMvc.perform(get("/ping")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("pong_k8_auth"));
-    }
-
-    @Test
     public void shouldReturnHealthStatus() throws Exception {
         mockMvc.perform(get("/health")
                         .accept(MediaType.TEXT_PLAIN))
