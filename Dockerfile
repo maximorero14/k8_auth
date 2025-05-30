@@ -18,6 +18,10 @@ WORKDIR /app
 # Copiamos el artefacto final
 COPY --from=build /app/target/*.jar application.jar
 
+# --- ARG con la versión que inyectará el workflow ---
+ARG APP_VERSION
+ENV APP_VERSION=${APP_VERSION}
+
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 USER appuser
 
@@ -25,4 +29,4 @@ EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "application.jar"]
 
-#docker build -t k8_auth . && docker run -p 8080:8080 --name k8_auth_container k8_auth
+#docker rm -f k8_auth_container && docker build -t k8_auth . && docker run -p 8080:8080 --name k8_auth_container k8_auth

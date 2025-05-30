@@ -2,6 +2,8 @@ package com.maximorero.k8_auth.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,21 +17,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class HealthCheckController {
 
 	private static final Logger log = LoggerFactory.getLogger(HealthCheckController.class);
-	private static final String podName = System.getenv("POD_NAME");
-
 
 	@GetMapping("/ping")
-	public ResponseEntity<JsonNode> ping() {
-		log.info("[log_name: ping] Responding from pod: {}", podName);
+    public ResponseEntity<JsonNode> ping() {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode response = mapper.createObjectNode();
 
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode response = mapper.createObjectNode()
-				.put("message", "pong_k8_auth")
-				.put("pod", podName);  // incluimos el nombre del pod en la respuesta
+        String version = System.getenv("APP_VERSION");
+        String podName = System.getenv("POD_NAME");          // tu env explícito
+        String hostName =  System.getenv("HOSTNAME"); // respaldo
 
-		return ResponseEntity.status(HttpStatus.OK).body(response);
-	}
+        response.put("message", "pong_k8_auth");
+        response.put("version", version != null ? version : "unknown");
+        response.put("pod", podName != null ? podName : "unknown");
+		response.put("hostName", hostName != null ? hostName : "unknown");
+		
 
+        log.info("[ping] {}", response);
+        return ResponseEntity.ok(response);
+    }
 
 	@GetMapping("/exception")
 	public ResponseEntity<JsonNode> exception(@RequestParam(name = "throw", defaultValue = "false") boolean throwException) throws Exception {
