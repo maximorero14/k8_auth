@@ -15,13 +15,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class HealthCheckController {
 
 	private static final Logger log = LoggerFactory.getLogger(HealthCheckController.class);
+	private static final String podName = System.getenv("POD_NAME");
 
 
 	@GetMapping("/ping")
-	public ResponseEntity<JsonNode> ping() throws Exception {
-		log.info("[log_name: ping]");
+	public ResponseEntity<JsonNode> ping() {
+		log.info("[log_name: ping] Responding from pod: {}", podName);
+
 		ObjectMapper mapper = new ObjectMapper();
-		JsonNode response = mapper.createObjectNode().put("message", "pong_k8_auth");
+		JsonNode response = mapper.createObjectNode()
+				.put("message", "pong_k8_auth")
+				.put("pod", podName);  // incluimos el nombre del pod en la respuesta
+
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
