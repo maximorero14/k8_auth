@@ -24,13 +24,12 @@ public class HealthCheckController {
         ObjectNode response = mapper.createObjectNode();
 
         String version = System.getenv("APP_VERSION");
-        String podName = System.getenv("POD_NAME");          // tu env explícito
-        String hostName =  System.getenv("HOSTNAME"); // respaldo
+        String podName = System.getenv("POD_NAME");
+    
 
         response.put("message", "pong_k8_auth");
         response.put("version", version != null ? version : "unknown");
         response.put("pod", podName != null ? podName : "unknown");
-		response.put("hostName", hostName != null ? hostName : "unknown");
 		
 
         log.info("[ping] {}", response);
