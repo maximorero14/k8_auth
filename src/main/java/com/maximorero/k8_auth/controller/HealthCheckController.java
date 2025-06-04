@@ -36,6 +36,22 @@ public class HealthCheckController {
         return ResponseEntity.ok(response);
     }
 
+	@GetMapping("/ping_v2")
+	public ResponseEntity<JsonNode> pingV2() {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode response = mapper.createObjectNode();
+
+		String version = System.getenv("APP_VERSION");
+		String podName = System.getenv("POD_NAME");
+
+		response.put("message", "pong_k8_auth_v2");
+		response.put("version", version != null ? version : "unknown");
+		response.put("pod", podName != null ? podName : "unknown");
+
+		log.info("[ping_v2] {}", response);
+		return ResponseEntity.ok(response);
+	}
+
 	@GetMapping("/exception")
 	public ResponseEntity<JsonNode> exception(@RequestParam(name = "throw", defaultValue = "false") boolean throwException) throws Exception {
 
