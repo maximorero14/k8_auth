@@ -37,7 +37,7 @@ public class PaymentController {
 		try {
 			RestClientResponse<PaymentResponse> response = restClient.post(
 					metricName,
-					paymentServiceUrl,
+					paymentServiceUrl+"/payment/create",
 					payment,
 					Map.of("Content-Type", "application/json"),
 					PaymentResponse.class
