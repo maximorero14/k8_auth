@@ -1,0 +1,25 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "K8AuthApplication",
+            "request": "launch",
+            "mainClass": "com.maximorero.k8_auth.K8AuthApplication",
+            "projectName": "k8_auth",
+            "env": {
+                "SPRING_APPLICATION_JSON": "{ \"services\": { \"payment\": { \"url\": \"https://run.mocky.io/v3/a0277545-e653-4f24-8d06-5b00b6cc269c\", \"timeout\": 5000, \"retries\": 3 } } }"
+            }
+        }
+    ]
+}

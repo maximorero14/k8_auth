@@ -1,0 +1,8 @@
+/Users/maximorero-new/Documents/maximorero14/k3smax/k8_auth/src/main/java/com/maximorero/k8_auth/K8AuthApplication.java
+/Users/maximorero-new/Documents/maximorero14/k3smax/k8_auth/src/main/java/com/maximorero/k8_auth/controller/HealthCheckController.java
+/Users/maximorero-new/Documents/maximorero14/k3smax/k8_auth/src/main/java/com/maximorero/k8_auth/controller/PaymentController.java
+/Users/maximorero-new/Documents/maximorero14/k3smax/k8_auth/src/main/java/com/maximorero/k8_auth/dto/PaymentRequest.java
+/Users/maximorero-new/Documents/maximorero14/k3smax/k8_auth/src/main/java/com/maximorero/k8_auth/dto/PaymentResponse.java
+/Users/maximorero-new/Documents/maximorero14/k3smax/k8_auth/src/main/java/com/maximorero/k8_auth/rest_client/EnhancedRestClient.java
+/Users/maximorero-new/Documents/maximorero14/k3smax/k8_auth/src/main/java/com/maximorero/k8_auth/rest_client/RestClientConfig.java
+/Users/maximorero-new/Documents/maximorero14/k3smax/k8_auth/src/main/java/com/maximorero/k8_auth/rest_client/RestClientResponse.java

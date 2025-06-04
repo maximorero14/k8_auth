@@ -43,7 +43,7 @@ public class PaymentController {
 					PaymentResponse.class
 			);
 
-			if (response.isSuccess()) {
+			if (!response.isHttpError()) {
 				return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
 			} else {
 				return handleErrorResponse(response);
