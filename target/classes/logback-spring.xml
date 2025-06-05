@@ -1,0 +1,11 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>{"timestamp":"%d{YYYY-MM-dd HH:mm:ss.SSS}", "app_name": "k8_auth", "endpoint":"%X{endpoint}", "level":"%level" , "message":"%msg" }%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>

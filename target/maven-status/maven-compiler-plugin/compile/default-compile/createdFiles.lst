@@ -2,9 +2,7 @@ com/maximorero/k8_auth/controller/HealthCheckController.class
 com/maximorero/k8_auth/rest_client/RestClientResponse.class
 com/maximorero/k8_auth/controller/PaymentController.class
 com/maximorero/k8_auth/rest_client/EnhancedRestClient.class
-com/maximorero/k8_auth/rest_client/RestClientConfig$1.class
 com/maximorero/k8_auth/rest_client/RestClientResponse$RestClientResponseBuilder.class
-com/maximorero/k8_auth/rest_client/RestClientConfig.class
 com/maximorero/k8_auth/dto/PaymentResponse.class
 com/maximorero/k8_auth/dto/PaymentRequest.class
 com/maximorero/k8_auth/K8AuthApplication.class
