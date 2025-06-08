@@ -66,7 +66,7 @@ public class PaymentController {
 			kafkaPublisher.publish(paymentRequest);
 			return ResponseEntity.ok(Map.of("success", true, "message", "Message published to NATS"));
 		} catch (Exception e) {
-			log.error("Error publishing to NATS: {}", e.getMessage(), e);
+			log.error("Error publishing to KAFKA: {}", e.getMessage(), e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(Map.of("success", false, "error", "Failed to publish message to NATS"));
 		}
