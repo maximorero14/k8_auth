@@ -7,7 +7,7 @@ import com.maximorero.k8_auth.dto.PaymentRequest;
 import com.maximorero.k8_auth.dto.PaymentResponse;
 import com.maximorero.k8_auth.rest_client.EnhancedRestClient;
 import com.maximorero.k8_auth.rest_client.RestClientResponse;
-import com.maximorero.k8_auth.service.NatsPublisher;
+import com.maximorero.k8_auth.service.KafkaPublisher;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class PaymentController {
 	private EnhancedRestClient restClient;
 
 	@Autowired
-	private NatsPublisher natsPublisher;
+	private KafkaPublisher kafkaPublisher;
 
 	@Value("${services.payment.url}")
 	private String paymentServiceUrl;
@@ -63,7 +63,7 @@ public class PaymentController {
 	@PostMapping("/create_async")
 	public ResponseEntity<?> createAsync(@RequestBody PaymentRequest paymentRequest) {
 		try {
-			natsPublisher.publish(paymentRequest);
+			kafkaPublisher.publish(paymentRequest);
 			return ResponseEntity.ok(Map.of("success", true, "message", "Message published to NATS"));
 		} catch (Exception e) {
 			log.error("Error publishing to NATS: {}", e.getMessage(), e);
