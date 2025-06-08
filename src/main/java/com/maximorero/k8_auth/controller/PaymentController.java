@@ -7,6 +7,7 @@ import com.maximorero.k8_auth.dto.PaymentRequest;
 import com.maximorero.k8_auth.dto.PaymentResponse;
 import com.maximorero.k8_auth.rest_client.EnhancedRestClient;
 import com.maximorero.k8_auth.rest_client.RestClientResponse;
+import com.maximorero.k8_auth.service.NatsPublisher;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,9 @@ public class PaymentController {
 
 	@Autowired
 	private EnhancedRestClient restClient;
+
+	@Autowired
+	private NatsPublisher natsPublisher;
 
 	@Value("${services.payment.url}")
 	private String paymentServiceUrl;
@@ -53,6 +57,18 @@ public class PaymentController {
 			log.error("Unexpected error in createPayment: {}", e.getMessage(), e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(Map.of("error", "Internal server error", "message", "An unexpected error occurred"));
+		}
+	}
+
+	@PostMapping("/create_async")
+	public ResponseEntity<?> createAsync(@RequestBody PaymentRequest paymentRequest) {
+		try {
+			natsPublisher.publish(paymentRequest);
+			return ResponseEntity.ok(Map.of("success", true, "message", "Message published to NATS"));
+		} catch (Exception e) {
+			log.error("Error publishing to NATS: {}", e.getMessage(), e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("success", false, "error", "Failed to publish message to NATS"));
 		}
 	}
 
