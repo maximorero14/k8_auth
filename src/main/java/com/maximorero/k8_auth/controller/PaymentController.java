@@ -64,7 +64,7 @@ public class PaymentController {
 	public ResponseEntity<?> createAsync(@RequestBody PaymentRequest paymentRequest) {
 		try {
 			kafkaPublisher.publish(paymentRequest);
-			return ResponseEntity.ok(Map.of("success", true, "message", "Message published to NATS"));
+			return ResponseEntity.ok(Map.of("success", true, "message", "Message published to KAFKA"));
 		} catch (Exception e) {
 			log.error("Error publishing to KAFKA: {}", e.getMessage(), e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
