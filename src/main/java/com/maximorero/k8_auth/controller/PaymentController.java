@@ -7,8 +7,9 @@ import com.maximorero.k8_auth.dto.PaymentRequest;
 import com.maximorero.k8_auth.dto.PaymentResponse;
 import com.maximorero.k8_auth.rest_client.EnhancedRestClient;
 import com.maximorero.k8_auth.rest_client.RestClientResponse;
-import com.maximorero.k8_auth.service.KafkaPublisher;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.maximorero.k8_auth.service.PaymentProducer;
+
 @RestController
 @RequestMapping("/payment")
 @Slf4j
@@ -29,7 +32,8 @@ public class PaymentController {
 	private EnhancedRestClient restClient;
 
 	@Autowired
-	private KafkaPublisher kafkaPublisher;
+	private PaymentProducer paymentProducer;
+
 
 	@Value("${services.payment.url}")
 	private String paymentServiceUrl;
@@ -63,7 +67,8 @@ public class PaymentController {
 	@PostMapping("/create_async")
 	public ResponseEntity<?> createAsync(@RequestBody PaymentRequest paymentRequest) {
 		try {
-			kafkaPublisher.publish(paymentRequest);
+			//kafkaPublisher.publish(paymentRequest);
+			paymentProducer.sendPaymentRequest(paymentRequest);
 			return ResponseEntity.ok(Map.of("success", true, "message", "Message published to KAFKA"));
 		} catch (Exception e) {
 			log.error("Error publishing to KAFKA: {}", e.getMessage(), e);
