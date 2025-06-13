@@ -7,7 +7,6 @@ import com.maximorero.k8_auth.dto.PaymentRequest;
 import com.maximorero.k8_auth.dto.PaymentResponse;
 import com.maximorero.k8_auth.rest_client.EnhancedRestClient;
 import com.maximorero.k8_auth.rest_client.RestClientResponse;
-import com.maximorero.k8_auth.service.KafkaPublisher;
 
 import lombok.extern.slf4j.Slf4j;
 
